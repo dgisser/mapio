@@ -7,7 +7,11 @@ from flask.ext.stormpath import StormpathManager
 from flask.ext.stormpath import login_required, user
 from stormpath.cache.redis_store import RedisStore
 
+
+
 app = Flask(__name__)
+
+app.config['STORMPATH_SOCIAL'] = {'FACEBOOK': {'app_id': "169054186767605",'app_secret': "023a3dd0cf832d80249d863baec5fef8",},'GOOGLE': {'client_id': "421392893604-t796vp3jjggvc2t296i80v5dhfvch03j.apps.googleusercontent.com",'client_secret': "5EufqXkFoR-fyJI_7Ok1oWdC",}}
 app.config['SECRET_KEY'] = 'someprivatestringhere'
 app.config['STORMPATH_API_KEY_FILE'] = expanduser('~/.stormpath/apiKey-2NUNTODZJKPTFOZ7PJADHYL01.properties')
 app.config['STORMPATH_APPLICATION'] = 'mapio'
@@ -16,6 +20,10 @@ app.config['STORMPATH_ENABLE_MIDDLE_NAME'] = False
 app.config['STORMPATH_ENABLE_FACEBOOK'] = False
 app.config['STORMPATH_REGISTRATION_REDIRECT_URL'] = '/registered'
 app.config['STORMPATH_ENABLE_GOOGLE'] = True
+app.config['STORMPATH_ENABLE_FACEBOOK'] = True
+app.config['STORMPATH_REGISTRATION_REDIRECT_URL'] = '/registered'
+app.config['STORMPATH_ENABLE_GOOGLE'] = True
+
 stormpath_manager = StormpathManager(app)
 db = SQLAlchemy(app)
 
@@ -35,7 +43,7 @@ class User(db.Model):
 def registered():
     userObj = User(user.email)
     db.session.add(userObj)
-    db.session.commit()
+   # db.session.commit()
     return "email added to db"
 
 listOfOrigin = [['Mark', -33.890542, 151.274856, 4], \
@@ -66,3 +74,13 @@ def hello():
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0')
+
+@app.route('/')
+def home():
+  if not user.is_authenticated():
+    return 'home page!'
+  else:
+    return user.email
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')

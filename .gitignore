@@ -1,1 +1,5 @@
 venv
+.env
+apiKey-2NUNTODZJKPTFOZ7PJADHYL01.properties
+/templates/login.html
+config.py
