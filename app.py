@@ -6,6 +6,7 @@ from flask import Flask, url_for, redirect, render_template, request, abort
 from flask.ext.stormpath import StormpathManager
 from flask.ext.stormpath import login_required, user
 from stormpath.cache.redis_store import RedisStore
+from restaurants import search,get_business
 
 
 
@@ -45,23 +46,53 @@ def registered():
 
 dest =  [-33.8, 150.5];
 
-listOfOrigin = [[-33.890542, 151.274856, 4],[33.923036, 151.259052, 5],[-34.028249, 151.157507, 3],[-33.80010128657071, 151.28747820854187, 2], [-33.950198, 151.259302, 1]]
+listOfOrigin = [[-33.890542, 151.274856, 4],[-33.923036, 151.259052, 5],[-34.028249, 151.157507, 3],[-33.80010128657071, 151.28747820854187, 2], [-33.950198, 151.259302, 1]]
 
 
 @app.route("/", methods=['post','get'])
 def hello():
 	if request.method=='POST':
-		cLat=int(request.form['lat'])
-		cLon=int(request.form['lon'])
-		user.lat=int(cLat)
-		user.lon=int(cLon)
+		cLat=float(request.form['lat'])
+		cLon=float(request.form['lon'])
+		user.lat=cLat
+		user.lon=cLon
 		newl=[]
 		newl.append(cLat)
 		newl.append(cLon)
 		newl.append(1)
 		listOfOrigin.append(newl)
+	ll={'lat':40.4435480,'lng':-79.9446180}
+	term=""
+	businessJson=yelpSearch(ll,term)
 
-	return render_template('home.html',dest=dest,listOfOrigin=listOfOrigin)
+	return render_template('home.html',dest=businessJson,listOfOrigin=listOfOrigin)
+
+def yelpSearch(ll, term):
+	try:
+		busDict=search(term, str(ll['lat'])+","+str(ll['lng']))
+	except urllib2.HTTPError as error:
+		sys.exit('Encountered HTTP error {0}. Abort program.'.format(error.code))
+
+	businesses=busDict.get('businesses')
+	businessList=[]
+	for i in businesses:
+		url=i['url']
+		name=i['name']
+		loc=i['location']
+		lat=loc['coordinate']['latitude']
+		lng=loc['coordinate']['longitude']
+		address=loc['display_address']
+		cBus={}
+		cBus["url"]=url
+		cBus["name"]=name
+		cBus["lat"]=lat
+		cBus["lng"	]=lng
+		cBus["add"]=address
+		businessList.append(cBus)
+
+	businessJson={}
+	businessJson["businesses"]=businessList
+	return json.dumps(businessJson)
 
 if __name__ == '__main__':
     app.run(debug=True)

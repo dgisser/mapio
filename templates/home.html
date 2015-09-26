@@ -8,10 +8,15 @@
 
 <script type=text/javascript>
 
+function decodeJSON(encodedJSON) {
+            var decodedJSON = $('<div/>').html(encodedJSON).text();
+            return $.parseJSON(decodedJSON);
+}
+
 function initialize() {
   var odest='{{ dest }}';
   var olistOfOrigin='{{ listOfOrigin }}';
-  var dest=JSON.parse(odest);
+  var dest=decodeJSON(odest);
   var listOfOrigin=JSON.parse(olistOfOrigin);
   var mapProp = {
     center:new google.maps.LatLng(-33,151.0),
@@ -22,12 +27,12 @@ function initialize() {
   var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
 
   var image='DestPin.png';
-
-  var marker=new google.maps.Marker({
-    position:{lat:dest[0], lng:dest[1]},
-    icon:image,
+  for(var i=0;i<dest.businesses.length;i++){
+    var marker=new google.maps.Marker({
+    position:{lat:dest.businesses[i].lat, lng:dest.businesses[i].lng},
     map:map
   });
+  }
 
   for (var i = 0; i < listOfOrigin.length; i++) {
     var origin = listOfOrigin[i];
@@ -105,7 +110,7 @@ google.maps.event.addDomListener(window, 'load', initialize);
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
                     <a href="#">
-                        Start Bootstrap
+                        Suggested Locations
                     </a>
                 </li>
                 <li>
