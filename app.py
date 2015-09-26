@@ -1,95 +1,68 @@
 from flask import Flask, flash, redirect, url_for, request, get_flashed_messages, render_template
-from flask.ext.login import LoginManager, UserMixin, current_user, login_user, logout_user
-
+import os
 from flask.ext.sqlalchemy import SQLAlchemy
+from os.path import expanduser
+from flask import Flask, url_for, redirect, render_template, request, abort
+from flask.ext.stormpath import StormpathManager
+from flask.ext.stormpath import login_required, user
+from stormpath.cache.redis_store import RedisStore
+
 app = Flask(__name__)
-app.config.from_pyfile('config.py')
+app.config['SECRET_KEY'] = 'someprivatestringhere'
+app.config['STORMPATH_API_KEY_FILE'] = expanduser('~/.stormpath/apiKey-2NUNTODZJKPTFOZ7PJADHYL01.properties')
+app.config['STORMPATH_APPLICATION'] = 'mapio'
+app.config['STORMPATH_ENABLE_FORGOT_PASSWORD'] = True
+app.config['STORMPATH_ENABLE_MIDDLE_NAME'] = False
+app.config['STORMPATH_ENABLE_FACEBOOK'] = False
+app.config['STORMPATH_REGISTRATION_REDIRECT_URL'] = '/registered'
+app.config['STORMPATH_ENABLE_GOOGLE'] = True
+stormpath_manager = StormpathManager(app)
 db = SQLAlchemy(app)
 
+class User(db.Model):
+  __tablename__ = "users"
+  user_id = db.Column(db.Integer, primary_key=True)
+  email = db.Column(db.Text, unique=True)
 
-# use for encrypt session
-app.config['SECRET_KEY'] = 'SET T0 4NY SECRET KEY L1KE RAND0M H4SH'
+  def __init__(self, email):
+    self.email = email
 
-login_manager = LoginManager()
-login_manager.init_app(app)
+  def __repr__(self):
+    return '<User %r>' % self.email
 
+@app.route('/registered')
+@login_required
+def registered():
+    userObj = User(user.email)
+    db.session.add(userObj)
+    db.session.commit()
+    return "email added to db"
 
-class UserNotFoundError(Exception):
-    pass
-
-
-# Simple user class base on UserMixin
-# http://flask-login.readthedocs.org/en/latest/_modules/flask/ext/login.html#UserMixin
-class User(UserMixin):
-    '''Simple User class'''
-    USERS = {
-        # username: password
-        'john': '1',
-        'mary': '1'
-    }
-
-    def __init__(self, id):
-        if not id in self.USERS:
-            raise UserNotFoundError()
-        self.id = id
-        self.password = self.USERS[id]
-
-    @classmethod
-    def get(self_class, id):
-        '''Return user instance of id, return None if not exist'''
-        try:
-            return self_class(id)
-        except UserNotFoundError:
-            return None
-
-
-# Flask-Login use this to reload the user object from the user ID stored in the session
-@login_manager.user_loader
-def load_user(id):
-    return User.get(id)
-
-
-@app.route('/login')
-def login():
-    return '''
-        <form action="/login/check" method="post">
-            <p>Username: <input name="username" type="text"></p>
-            <p>Password: <input name="password" type="password"></p>
-            <input type="submit">
-        </form>
-    '''
-
-
-@app.route('/login/check', methods=['post'])
-def login_check():
-    # validate username and password
-    user = User.get(request.form['username'])
-    if (user and user.password == request.form['password']):
-        login_user(user)
-        return redirect('/')
-    else:
-    	flash('Username or password incorrect')
-        return redirect('/login')
-
-@app.route('/_get_location')
-def add_numbers():
-    uLat = request.args.get('cLat', 0, type=float)
-    uLon = request.args.get('cLon', 0, type=float)
-    print(uLat)
-    return redirect('/')
-
-
-@app.route('/logout')
-def logout():
-    logout_user()
-    return redirect('/')
+listOfOrigin = [['Mark', -33.890542, 151.274856, 4], \
+  ['Tom', -33.923036, 151.259052, 5], \
+  ['Bob', -34.028249, 151.157507, 3], \
+  ['Susan', -33.80010128657071, 151.28747820854187, 2], \
+  ['Julie', -33.950198, 151.259302, 1] \
+]
 
 @app.route("/", methods=['post','get'])
 def hello():
 	if request.method=='POST':
-		print("YES")
-	return render_template('home.html')
+		cLat=request.form['lat']
+		cLon=request.form['lon']
+		user.lat=cLat
+		user.lon=cLon
+		newl=[]
+		newl.append("Ben")
+		newl.append(cLat)
+		newl.append(cLon)
+		listOfOrigin.append(newl)
+		for i in range(len(listOfOrigin)):
+			print(listOfOrigin[i])
+
+	return render_template('home.html',originList=listOfOrigin)
+
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')

@@ -12,6 +12,11 @@ body{
 	padding-top: 0;
 	margin-top: 0;
 }
+.locationForm{
+    padding-top: 5px;
+    margin: 5px;
+    text-align: right;
+}
 #googleMap{
 	margin: 0 5% 0 5%;
 	width:90%;
