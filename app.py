@@ -56,8 +56,6 @@ def hello():
 	if request.method=='POST':
 		cLat=float(request.form['lat'])
 		cLon=float(request.form['lon'])
-		user.lat=cLat
-		user.lon=cLon
 		newl=[]
 		newl.append(cLat)
 		newl.append(cLon)
@@ -88,6 +86,7 @@ def yelpSearch(ll, term):
 
 	businesses=busDict.get('businesses')
 	businessList=[]
+	print(businesses)
 	for i in businesses:
 		url=i['url']
 		name=i['name']
