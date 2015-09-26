@@ -1,5 +1,5 @@
 from flask import Flask, flash, redirect, url_for, request, get_flashed_messages, render_template
-import os
+import os, json
 from flask.ext.sqlalchemy import SQLAlchemy
 from os.path import expanduser
 from flask import Flask, url_for, redirect, render_template, request, abort
@@ -18,9 +18,6 @@ app.config['STORMPATH_APPLICATION'] = 'mapio'
 app.config['STORMPATH_ENABLE_FORGOT_PASSWORD'] = True
 app.config['STORMPATH_ENABLE_MIDDLE_NAME'] = False
 app.config['STORMPATH_ENABLE_FACEBOOK'] = False
-app.config['STORMPATH_REGISTRATION_REDIRECT_URL'] = '/registered'
-app.config['STORMPATH_ENABLE_GOOGLE'] = True
-app.config['STORMPATH_ENABLE_FACEBOOK'] = True
 app.config['STORMPATH_REGISTRATION_REDIRECT_URL'] = '/registered'
 app.config['STORMPATH_ENABLE_GOOGLE'] = True
 
@@ -46,41 +43,25 @@ def registered():
    # db.session.commit()
     return "email added to db"
 
-listOfOrigin = [['Mark', -33.890542, 151.274856, 4], \
-  ['Tom', -33.923036, 151.259052, 5], \
-  ['Bob', -34.028249, 151.157507, 3], \
-  ['Susan', -33.80010128657071, 151.28747820854187, 2], \
-  ['Julie', -33.950198, 151.259302, 1] \
-]
+dest =  [-33.8, 150.5];
+
+listOfOrigin = [[-33.890542, 151.274856, 4],[33.923036, 151.259052, 5],[-34.028249, 151.157507, 3],[-33.80010128657071, 151.28747820854187, 2], [-33.950198, 151.259302, 1]]
+
 
 @app.route("/", methods=['post','get'])
 def hello():
 	if request.method=='POST':
-		cLat=request.form['lat']
-		cLon=request.form['lon']
-		user.lat=cLat
-		user.lon=cLon
+		cLat=int(request.form['lat'])
+		cLon=int(request.form['lon'])
+		user.lat=int(cLat)
+		user.lon=int(cLon)
 		newl=[]
-		newl.append("Ben")
 		newl.append(cLat)
 		newl.append(cLon)
+		newl.append(1)
 		listOfOrigin.append(newl)
-		for i in range(len(listOfOrigin)):
-			print(listOfOrigin[i])
 
-	return render_template('home.html',originList=listOfOrigin)
-
-
-
-if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0')
-
-@app.route('/')
-def home():
-  if not user.is_authenticated():
-    return 'home page!'
-  else:
-    return user.email
+	return render_template('home.html',dest=dest,listOfOrigin=listOfOrigin)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(debug=True)
