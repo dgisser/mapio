@@ -26,8 +26,6 @@ import oauth2
 
 
 API_HOST = 'api.yelp.com'
-DEFAULT_TERM = 'dinner'
-DEFAULT_LOCATION = 'San Francisco, CA'
 SEARCH_LIMIT = 10
 SEARCH_PATH = '/v2/search/'
 BUSINESS_PATH = '/v2/business/'
@@ -72,7 +70,7 @@ def request(host, path, url_params=None):
     token = oauth2.Token(TOKEN, TOKEN_SECRET)
     oauth_request.sign_request(oauth2.SignatureMethod_HMAC_SHA1(), consumer, token)
     signed_url = oauth_request.to_url()
-    
+
     print u'Querying {0} ...'.format(url)
 
     conn = urllib2.urlopen(signed_url, None)
@@ -93,10 +91,10 @@ def search(term, ll):
     Returns:
         dict: The JSON response from the request.
     """
-    
+
     url_params = {
         'term': term.replace(' ', '+'),
-        'll': ll.replace(' ', ','),
+        'll': ll,
 	'limit': SEARCH_LIMIT
     }
     return request(API_HOST, SEARCH_PATH, url_params=url_params)
@@ -143,15 +141,10 @@ def query_api(term, ll):
 
 
 def main():
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument('-q', '--term', dest='term', default=DEFAULT_TERM, type=str, help='Search term (default: %(default)s)')
-    parser.add_argument('-l', '--ll', dest='ll', default=DEFAULT_LOCATION, type=str, help='Search ll (default: %(default)s)')
-
-    input_values = parser.parse_args()
-
+    ll=getLocation()
+    term=""
     try:
-        query_api(input_values.term, input_values.ll)
+        query_api(term, str(ll['lat'])+","+str(ll['lon']))
     except urllib2.HTTPError as error:
         sys.exit('Encountered HTTP error {0}. Abort program.'.format(error.code))
 
