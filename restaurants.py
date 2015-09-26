@@ -28,7 +28,7 @@ import oauth2
 API_HOST = 'api.yelp.com'
 DEFAULT_TERM = 'dinner'
 DEFAULT_LOCATION = 'San Francisco, CA'
-SEARCH_LIMIT = 3
+SEARCH_LIMIT = 10
 SEARCH_PATH = '/v2/search/'
 BUSINESS_PATH = '/v2/business/'
 
@@ -83,7 +83,7 @@ def request(host, path, url_params=None):
 
     return response
 
-def search(term, location):
+def search(term, ll):
     """Query the Search API by a search term and location.
 
     Args:
@@ -96,8 +96,8 @@ def search(term, location):
     
     url_params = {
         'term': term.replace(' ', '+'),
-        'location': location.replace(' ', '+'),
-        'limit': SEARCH_LIMIT
+        'll': ll.replace(' ', ','),
+	'limit': SEARCH_LIMIT
     }
     return request(API_HOST, SEARCH_PATH, url_params=url_params)
 
@@ -114,14 +114,14 @@ def get_business(business_id):
 
     return request(API_HOST, business_path)
 
-def query_api(term, location):
+def query_api(term, ll):
     """Queries the API by the input values from the user.
 
     Args:
         term (str): The search term to query.
         location (str): The location of the business to query.
     """
-    response = search(term, location)
+    response = search(term, ll)
 
     businesses = response.get('businesses')
 
@@ -146,12 +146,12 @@ def main():
     parser = argparse.ArgumentParser()
 
     parser.add_argument('-q', '--term', dest='term', default=DEFAULT_TERM, type=str, help='Search term (default: %(default)s)')
-    parser.add_argument('-l', '--location', dest='location', default=DEFAULT_LOCATION, type=str, help='Search location (default: %(default)s)')
+    parser.add_argument('-l', '--ll', dest='ll', default=DEFAULT_LOCATION, type=str, help='Search ll (default: %(default)s)')
 
     input_values = parser.parse_args()
 
     try:
-        query_api(input_values.term, input_values.location)
+        query_api(input_values.term, input_values.ll)
     except urllib2.HTTPError as error:
         sys.exit('Encountered HTTP error {0}. Abort program.'.format(error.code))
 
