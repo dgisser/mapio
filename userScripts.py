@@ -1,9 +1,9 @@
-import re,requests
+import urllib, ast, json
 def getLocation():
-	raw = requests.get('http://www.geoiptool.com/').text
-	latlon = re.search("GPoint\(([^)]+)\)",raw).groups(0)
-	lat,lon = map(float,latlon[0].split(","))
-	map={}
-	map['lat']=lat
-	map['lon']=lon
-	return map
+	url='http://freegeoip.net/json/'	
+	response=urllib.urlopen(url).read()
+	response=ast.literal_eval(response)
+	lon=response['longitude']
+	lat=response['latitude']
+	d={'lon':lon,'lat':lat}
+	return d
