@@ -107,13 +107,24 @@ google.maps.event.addDomListener(window, 'load', initialize);
         </form>
       </a>
       <div class=metanav>
-        <ul class="nav navbar-nav pull-right display:inline-block"> 
-          {% if user.is_authenticated() %}
-          <li><a href="/logout" class="glyphicon glyphicon-log-out pull-right"></a></li>
-          {% else %}
-          <li><a href="/login" class="glyphicon glyphicon-log-in pull-right"></a></li>
-          {% endif %}
+        <ul class="nav navbar-right display:inline-block"> 
+          <form class="navbar-form center-block" action="/group" method="POST" role  ="search">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="groupID" name="groupID" id="groupID">
+            <div class="input-group-btn">
+                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+            </div>
+        </div>
+        </form>
         </ul>
+
+          {% if user.is_authenticated() %}
+          <li><a href="/logout" class="glyphicon pull-right glyphicon-log-out pull-right"></a></li>
+          {% else %}
+          <li><a href="/login" class="glyphicon pull-right glyphicon-log-in pull-right"></a></li>
+          {% endif %}
+
+          <li><a href="/logout" class="pull-right">Create Group</a></li>
       </div>
     </div>
   </div>

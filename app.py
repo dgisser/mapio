@@ -82,6 +82,10 @@ def returnSearch():
 
 	return render_template('home.html',dest=businessJson,listOfOrigin=listOfOrigin,latC=ll[0],lngC=ll[1])
 
+@app.route("/group",methods=['post'])
+def returnGroup():
+	
+
 def yelpSearch(ll, term):
 	try:
 		busDict=search(term, str(ll[0])+","+str(ll[1]))
