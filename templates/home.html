@@ -18,27 +18,43 @@ function initialize() {
   var olistOfOrigin='{{ listOfOrigin }}';
   var dest=decodeJSON(odest);
   var listOfOrigin=JSON.parse(olistOfOrigin);
+  var latC='{{ latC }}';
+  var lngC='{{ lngC }}';
   var mapProp = {
-    center:new google.maps.LatLng(40,-81.0),
+    center:new google.maps.LatLng(latC,lngC),
     zoom:9,
     mapTypeId:google.maps.MapTypeId.ROADMAP
   };
 
   var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
 
-  var image='DestPin.png';
+  var pinColor="FF0000";
+  var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+        new google.maps.Size(21, 34),
+        new google.maps.Point(0,0),
+        new google.maps.Point(10, 34));
+
+
   for(var i=0;i<dest.businesses.length;i++){
     var marker=new google.maps.Marker({
     position:{lat:dest.businesses[i].lat, lng:dest.businesses[i].lng},
-    map:map
+    map:map,
+    icon:pinImage
   });
   }
 
+  pinColor="0000FF"
+  pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+        new google.maps.Size(21, 34),
+        new google.maps.Point(0,0),
+        new google.maps.Point(10, 34));
+  
   for (var i = 0; i < listOfOrigin.length; i++) {
     var origin = listOfOrigin[i];
     var marker = new google.maps.Marker({
       position: {lat: origin[0], lng: origin[1]},
-      map: map
+      map: map,
+      icon:pinImage
     });
   }
 }
@@ -137,7 +153,7 @@ google.maps.event.addDomListener(window, 'load', initialize);
                         <div id="googleMap"></div> 
                         <div id="locationForm">
                           <button onclick="getNewLocation();">Get Location</button>
-                          <form name="locationForm" method='POST'>
+                          <form name="locationForm" action="/" method='POST'>
                           <input id='lat' type=text name="lat" value=0>
                           <input id='lon' type=text name="lon" value=0>
 

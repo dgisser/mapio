@@ -2,11 +2,12 @@ from flask import Flask, flash, redirect, url_for, request, get_flashed_messages
 import os, json
 from flask.ext.sqlalchemy import SQLAlchemy
 from os.path import expanduser
-from flask import Flask, url_for, redirect, render_template, request, abort
+from flask import Flask, url_for, redirect, render_template, request, abort,Response
 from flask.ext.stormpath import StormpathManager
 from flask.ext.stormpath import login_required, user
 from stormpath.cache.redis_store import RedisStore
 from restaurants import search,get_business
+from findCenter import findCenterMinLargest
 import urllib2
 
 
@@ -62,24 +63,26 @@ def hello():
 		newl.append(cLon)
 		newl.append(1)
 		listOfOrigin.append(newl)
-	ll={'lat':40.4435480,'lng':-79.9446180}
+
+	ll=findCenterMinLargest(listOfOrigin)[0]
 	term=""
 	businessJson=yelpSearch(ll,term)
+	print(ll[0])
 
-	return render_template('home.html',dest=businessJson,listOfOrigin=listOfOrigin)
+	return render_template('home.html',dest=businessJson,listOfOrigin=listOfOrigin,latC=ll[0],lngC=ll[1])
 
 @app.route("/search",methods=['post'])
 def returnSearch():
 	assert request.method=='POST'
 	searchTerm=request.form['searchTerm']
-	ll={'lat':40.4435480,'lng':-79.9446180}
+	ll=findCenterMinLargest(listOfOrigin)[0]
 	businessJson=yelpSearch(ll,searchTerm)
 
-	return render_template('home.html',dest=businessJson,listOfOrigin=listOfOrigin)
+	return render_template('home.html',dest=businessJson,listOfOrigin=listOfOrigin,latC=ll[0],lngC=ll[1])
 
 def yelpSearch(ll, term):
 	try:
-		busDict=search(term, str(ll['lat'])+","+str(ll['lng']))
+		busDict=search(term, str(ll[0])+","+str(ll[1]))
 	except urllib2.HTTPError as error:
 		sys.exit('Encountered HTTP error {0}. Abort program.'.format(error.code))
 
