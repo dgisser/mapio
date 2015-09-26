@@ -14,9 +14,18 @@ function initialize() {
 google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 
+<div class=page>
 <h1 style="text-align:center; font-size:40px;"> MapIO </h1>
 </head>
 
+<div class=metanav style="text-align:right;">
+	{% if not session.logged_in %}
+    <a href="/login">log in</a>
+	{% else %}
+    <a href="/logout">log out</a>
+	{% endif %}
+  {% block body %}{% endblock %}
+</div>
 
 <body style="text-align:center;">
 <div id="googleMap" style="margin:0 auto 0 auto; width:800px;height:500px;"></div>
