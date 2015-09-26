@@ -72,7 +72,7 @@ def request(host, path, url_params=None):
     signed_url = oauth_request.to_url()
 
     print u'Querying {0} ...'.format(url)
-
+    print signed_url
     conn = urllib2.urlopen(signed_url, None)
     try:
         response = json.loads(conn.read())
@@ -126,25 +126,26 @@ def query_api(term, ll):
     if not businesses:
         print u'No businesses for {0} in {1} found.'.format(term, location)
         return
+    for x in range(len(businesses)):
+        business_id = businesses[x]['id']
 
-    business_id = businesses[0]['id']
+        print u'{0} businesses found, querying business info for the top result "{1}" ...'.format(
+            len(businesses),
+            business_id
+        )
 
-    print u'{0} businesses found, querying business info for the top result "{1}" ...'.format(
-        len(businesses),
-        business_id
-    )
+        response = get_business(business_id)
 
-    response = get_business(business_id)
-
-    print u'Result for business "{0}" found:'.format(business_id)
-    pprint.pprint(response, indent=2)
+        print u'Result for business "{0}" found:'.format(business_id)
+        pprint.pprint(response, indent=2)
 
 
 def main():
-    ll=getLocation()
+    # ll=getLocation()
+    ll={'lat':40.4435480,'lng':-79.9446180}
     term=""
     try:
-        query_api(term, str(ll['lat'])+","+str(ll['lon']))
+        query_api(term, str(ll['lat'])+","+str(ll['lng']))
     except urllib2.HTTPError as error:
         sys.exit('Encountered HTTP error {0}. Abort program.'.format(error.code))
 
