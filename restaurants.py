@@ -26,8 +26,6 @@ import oauth2
 
 
 API_HOST = 'api.yelp.com'
-DEFAULT_TERM = 'dinner'
-DEFAULT_LOCATION = 'San Francisco, CA'
 SEARCH_LIMIT = 10
 SEARCH_PATH = '/v2/search/'
 BUSINESS_PATH = '/v2/business/'
@@ -72,9 +70,9 @@ def request(host, path, url_params=None):
     token = oauth2.Token(TOKEN, TOKEN_SECRET)
     oauth_request.sign_request(oauth2.SignatureMethod_HMAC_SHA1(), consumer, token)
     signed_url = oauth_request.to_url()
-    
-    print u'Querying {0} ...'.format(url)
 
+    print u'Querying {0} ...'.format(url)
+    print signed_url
     conn = urllib2.urlopen(signed_url, None)
     try:
         response = json.loads(conn.read())
@@ -93,10 +91,10 @@ def search(term, ll):
     Returns:
         dict: The JSON response from the request.
     """
-    
+
     url_params = {
         'term': term.replace(' ', '+'),
-        'll': ll.replace(' ', ','),
+        'll': ll,
 	'limit': SEARCH_LIMIT
     }
     return request(API_HOST, SEARCH_PATH, url_params=url_params)
@@ -128,30 +126,26 @@ def query_api(term, ll):
     if not businesses:
         print u'No businesses for {0} in {1} found.'.format(term, location)
         return
+    for x in range(len(businesses)):
+        business_id = businesses[x]['id']
 
-    business_id = businesses[0]['id']
+        print u'{0} businesses found, querying business info for the top result "{1}" ...'.format(
+            len(businesses),
+            business_id
+        )
 
-    print u'{0} businesses found, querying business info for the top result "{1}" ...'.format(
-        len(businesses),
-        business_id
-    )
+        response = get_business(business_id)
 
-    response = get_business(business_id)
-
-    print u'Result for business "{0}" found:'.format(business_id)
-    pprint.pprint(response, indent=2)
+        print u'Result for business "{0}" found:'.format(business_id)
+        pprint.pprint(response, indent=2)
 
 
 def main():
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument('-q', '--term', dest='term', default=DEFAULT_TERM, type=str, help='Search term (default: %(default)s)')
-    parser.add_argument('-l', '--ll', dest='ll', default=DEFAULT_LOCATION, type=str, help='Search ll (default: %(default)s)')
-
-    input_values = parser.parse_args()
-
+    # ll=getLocation()
+    ll={'lat':40.4435480,'lng':-79.9446180}
+    term=""
     try:
-        query_api(input_values.term, input_values.ll)
+        query_api(term, str(ll['lat'])+","+str(ll['lng']))
     except urllib2.HTTPError as error:
         sys.exit('Encountered HTTP error {0}. Abort program.'.format(error.code))
 

@@ -1,7 +1,7 @@
 {% extends "home.html" %}
 {% block body %}
   {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
-  <form action="/login/authenticate" method=post>
+  <form action="/login/check" method=post>
     <dl>
       <dt>Username:
       <dd><input type=text name=username>
