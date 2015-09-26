@@ -1,16 +1,15 @@
 import googlemaps
-import restaurants
+from restaurants import search
 
-def getTimes():
+def getTimes(ll,peeps):
     key = 'AIzaSyDrXFWbkfQSZ9ayLS-XUWjOnKrs1x440eA'
     client = googlemaps.Client(key)
-    ll="40.4435480,-79.9446180"
+    if not ll:
+        ll="40.4435480,-79.9446180"
     term=""
     rests=search(term, ll)
-    # people() is made up function
-    peeps=people()
 
-    businesses = response.get('businesses')
+    businesses = rests.get('businesses')
 
     if not businesses:
         print u'No businesses for {0} in {1} found.'.format(term, ll)

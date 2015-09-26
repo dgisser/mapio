@@ -8,6 +8,7 @@ from flask.ext.stormpath import login_required, user
 from stormpath.cache.redis_store import RedisStore
 from restaurants import search,get_business
 from findCenter import findCenterMinLargest
+from times import getTimes
 import urllib2
 
 
@@ -55,7 +56,7 @@ listOfOrigin = [[40.890542, -81.274856, 4],[39.923036, -80.259052, 5],[40.028249
 def hello():
 	if request.method=='POST':
 		cLat=float(request.form['lat'])
-		cLon=float(request.form['lon'])	
+		cLon=float(request.form['lon'])
 		newl=[]
 		newl.append(cLat)
 		newl.append(cLon)
@@ -69,9 +70,10 @@ def hello():
 	ll=findCenterMinLargest(listOfOrigin)[0]
 	term=""
 	businessJson=yelpSearch(ll,term)
-	print(ll[0])
+	teles=timeSearch(ll)
+        print(ll[0])
 
-	return render_template('home.html',dest=businessJson,listOfOrigin=listOfOrigin,latC=ll[0],lngC=ll[1])
+	return render_template('home.html',dest=businessJson,teles3=teles,listOfOrigin=listOfOrigin,latC=ll[0],lngC=ll[1])
 
 @app.route("/search",methods=['post'])
 def returnSearch():
@@ -79,12 +81,8 @@ def returnSearch():
 	searchTerm=request.form['searchTerm']
 	ll=findCenterMinLargest(listOfOrigin)[0]
 	businessJson=yelpSearch(ll,searchTerm)
-
-	return render_template('home.html',dest=businessJson,listOfOrigin=listOfOrigin,latC=ll[0],lngC=ll[1])
-
-@app.route("/group",methods=['post'])
-def returnGroup():
-	
+        teles=timeSearch(ll)
+	return render_template('home.html',dest=businessJson,teles3=teles,listOfOrigin=listOfOrigin,latC=ll[0],lngC=ll[1])
 
 def yelpSearch(ll, term):
 	try:
@@ -120,6 +118,12 @@ def yelpSearch(ll, term):
 	businessJson={}
 	businessJson["businesses"]=businessList
 	return json.dumps(businessJson)
+
+def timeSearch(ll):
+        ele=getTimes(str(ll[0])+","+str(ll[1]),listOfOrigin)
+        eleJson={}
+        eleJson['rows']=ele
+        return json.dumps(eleJson)
 
 if __name__ == '__main__':
     app.run(debug=True)
