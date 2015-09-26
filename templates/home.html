@@ -21,6 +21,7 @@ function initialize() {
   var listOfOrigin=JSON.parse(olistOfOrigin);
   var latC='{{ latC }}';
   var lngC='{{ lngC }}';
+  
   var mapProp = {
     center:new google.maps.LatLng(latC,lngC),
     zoom:9,
@@ -125,7 +126,15 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 <body onload="getNewLocation();">
 
-<div class="nav-side-menu">
+
+
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12" style="padding-left:0px">
+                        <div class="nav-side-menu">
     <div class="brand">MapIO</div>
     <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
   
@@ -134,53 +143,61 @@ google.maps.event.addDomListener(window, 'load', initialize);
             <ul id="menu-content" class="menu-content collapse out">
                 <li>
                   <a href="#">
-                  <i class="fa fa-dashboard fa-lg"></i> Recommended Meeting Spots
+                  <i class="fa fa-dashboard fa-lg" style="text-align:center"></i> Recommended Meeting Spots
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                  <i id="N0" class="fa fa-users fa-lg"></i> 
+                  <i id="R0" style="text-align:center"/>
                   </a>
                 </li>
                  <li>
-                  <a href="#">
+                  <a href="#" style="text-align:center">
                   <i id="N1" class="fa fa-users fa-lg"></i> 
-                  <i id="R1"/>
+                  <i id="R1" style="text-align:center"/>
                   </a>
                   </li>
 
                  <li>
                   <a href="#">
                   <i id="N2" class="fa fa-users fa-lg"></i> 
-                  <i id="R2"/>
+                  <i id="R2" style="text-align:center"/>
                   </a>
                 </li>
 
                  <li>
                   <a href="#">
                   <i id="N3" class="fa fa-users fa-lg"></i> 
-                  <i id="R3"/>
+                  <i id="R3" style="text-align:center"/>
                   </a>
                 </li>
 
                  <li>
                   <a href="#">
                   <i id="N4" class="fa fa-users fa-lg"></i> 
-                  <i id="R4"/>
+                  <i id="R4" style="text-align:center"/>
                   </a>
                 </li>
 
-                 <li>
+                <li>
                   <a href="#">
                   <i id="N5" class="fa fa-users fa-lg"></i> 
-                  <i id="R5"/>
+                  <i id="R5" style="text-align:center"/>
                   </a>
                 </li>
+                 
+                <li>
+                  <a href="#">
+                  <i id="N6" class="fa fa-users fa-lg"></i> 
+                  <i id="R6" style="text-align:center"/>
+                  </a>
+                </li>
+
             </ul>
      </div>
 </div>
 
-
-        <!-- Page Content -->
-        <div id="page-content-wrapper">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12">
                         <div id="googleMap"></div>
                         
 
