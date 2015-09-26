@@ -10,11 +10,12 @@ from restaurants import search,get_business
 from findCenter import findCenterMinLargest
 from times import getTimes
 import urllib2
-
-
+from sqlalchemy import create_engine
+from geoalchemy2 import Geography
 
 app = Flask(__name__)
 
+engine = create_engine('postgresql://gis:gis@localhost/gis', echo=True)
 app.config['STORMPATH_SOCIAL'] = {'FACEBOOK': {'app_id': "169054186767605",'app_secret': "023a3dd0cf832d80249d863baec5fef8",},'GOOGLE': {'client_id': "421392893604-t796vp3jjggvc2t296i80v5dhfvch03j.apps.googleusercontent.com",'client_secret': "5EufqXkFoR-fyJI_7Ok1oWdC",}}
 app.config['SECRET_KEY'] = 'someprivatestringhere'
 app.config['STORMPATH_API_KEY_FILE'] = expanduser('~/.stormpath/apiKey-2NUNTODZJKPTFOZ7PJADHYL01.properties')
@@ -32,12 +33,25 @@ class User(db.Model):
   __tablename__ = "users"
   user_id = db.Column(db.Integer, primary_key=True)
   email = db.Column(db.Text, unique=True)
+  location = db.Column(Geography('Point,4326'))
 
   def __init__(self, email):
     self.email = email
 
   def __repr__(self):
     return '<User %r>' % self.email
+
+class Group(db.Model):
+  __tablename__ = "groups"
+  group_id = db.Column(db.Integer, primary_key=True)
+  key = db.Column(db.String(10), UNIQUE(key));
+
+  def __init__(self, key):
+    self.key = key
+
+  def __repr__(self):
+    return '<Group %r>' % self.key
+
 
 @app.route('/registered')
 @login_required
