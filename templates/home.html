@@ -2,34 +2,94 @@
 <html>
 <head>
 <script src="http://maps.googleapis.com/maps/api/js"></script>
-<script>
-function initialize() {
-  var mapProp = {
-    center:new google.maps.LatLng(51.508742,-0.120850),
-    zoom:5,
-    mapTypeId:google.maps.MapTypeId.ROADMAP
-  };
-  var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
-}
-google.maps.event.addDomListener(window, 'load', initialize);
-</script>
+<script type=text/javascript src="{{ url_for('static',filename='home.js') }}"></script>
 
 <div class=page>
-<h1 style="text-align:center; font-size:40px;"> MapIO </h1>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="{{ url_for('static',filename='home.css') }}">
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">MapIO</a>
+    </div>
+    <div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#About">About</a></li>
+        <li><a href="#Friends">Friends</a></li>
+
+      </ul>
+      
+      <a class="navbar-center">
+        <form class="navbar-form center-block" role="search">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
+            <div class="input-group-btn">
+                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+            </div>
+        </div>
+        </form>
+      </a>
+      <div class=metanav>
+        <ul class="nav navbar-nav pull-right"> 
+          {% if current_user.is_authenticated %}
+          <li><a href="{{ url_for('logout') }}" class="glyphicon glyphicon-cog pull-right">Logout</a></li>
+          {% else %}
+          <li><a href="{{ url_for('login') }}" class="glyphicon glyphicon-cog pull-right">Login</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+
 </head>
 
-<div class=metanav style="text-align:right;">
-	{% if not session.logged_in %}
-    <a href="/login">log in</a>
-	{% else %}
-    <a href="/logout">log out</a>
-	{% endif %}
-  {% block body %}{% endblock %}
-</div>
+<body>
+<div id="wrapper">
 
-<body style="text-align:center;">
-<div id="googleMap" style="margin:0 auto 0 auto; width:800px;height:500px;"></div>
-<input type="submit" name="myLocation" value="Send Location">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Start Bootstrap
+                    </a>
+                </li>
+                <li>
+                    <a href="#">Restaurant 1</a>
+                </li>
+                <li>
+                    <a href="#">Restaurant 2</a>
+                </li>
+                <li>
+                    <a href="#">Restaurant 3</a>
+                </li>
+                <li>
+                    <a href="#">Restaurant 4</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div id="googleMap"></div>  
+                        <button onclick="getLocation();"> Send Location </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+
 </body>
 
 </html> 
