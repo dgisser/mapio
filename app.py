@@ -20,7 +20,7 @@ app.config['STORMPATH_API_KEY_FILE'] = expanduser('~/.stormpath/apiKey-2NUNTODZJ
 app.config['STORMPATH_APPLICATION'] = 'mapio'
 app.config['STORMPATH_ENABLE_FORGOT_PASSWORD'] = True
 app.config['STORMPATH_ENABLE_MIDDLE_NAME'] = False
-app.config['STORMPATH_ENABLE_FACEBOOK'] = False
+app.config['STORMPATH_ENABLE_FACEBOOK'] = True
 app.config['STORMPATH_REGISTRATION_REDIRECT_URL'] = '/registered'
 app.config['STORMPATH_ENABLE_GOOGLE'] = True
 
@@ -44,7 +44,7 @@ def registered():
     userObj = User(user.email)
     db.session.add(userObj)
    # db.session.commit()
-    return "email added to db"
+    return render_template("home.html")
 
 dest =  [-33.8, 150.5];
 
