@@ -36,14 +36,16 @@ center:new google.maps.LatLng(latC,lngC),
             new google.maps.Point(0,0),
             new google.maps.Point(10, 34));
 
-
+    var markers = [];
     for(var i=0;i<dest.businesses.length;i++){
-        var marker=new google.maps.Marker({
-position:{lat:dest.businesses[i].lat, lng:dest.businesses[i].lng},
-map:map,
-icon:pinImage
-});
-}
+      
+      markers[i]=new google.maps.Marker({
+        position:{lat:dest.businesses[i].lat, lng:dest.businesses[i].lng},
+        map:map,
+        icon:pinImage
+      });
+
+    }
 
 for(var i=0;(i<dest.businesses.length && i<5);i++){
     cBus=dest.businesses[i]
@@ -192,18 +194,11 @@ google.maps.event.addDomListener(window, 'load', initialize);
                                 </a>
                                 </li>
 
-                                <li style="text-align:center">
-                                <a href="#">
-                                    <i id="N6" class="fa fa-users fa-lg"></i> 
-                                    <i id="R6" ></i>
-                                </a>
-                                </li>
-
                             </ul>
                         </div>
                     </div>
 
-                    <div id="googleMap" style="width:500px;height:400px;"></div>
+                    <div id="googleMap" ></div>
 
 
                     <div id="locationForm"> 
