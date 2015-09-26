@@ -1,74 +1,74 @@
 <!DOCTYPE html>
 <html>
-<head>
-<script src="http://maps.googleapis.com/maps/api/js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="{{
-  url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+    <head>
+        <script src="http://maps.googleapis.com/maps/api/js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="{{
+                url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
 
-<script type=text/javascript>
+            <script type=text/javascript>
 
-function decodeJSON(encodedJSON) {
-            var decodedJSON = $('<div/>').html(encodedJSON).text();
-            return $.parseJSON(decodedJSON);
-}
+                function decodeJSON(encodedJSON) {
+                    var decodedJSON = $('<div/>').html(encodedJSON).text();
+                    return $.parseJSON(decodedJSON);
+                }
 
 function initialize() {
-  var odest='{{ dest }}';
-  var olistOfOrigin='{{ listOfOrigin }}';
-  var dest=decodeJSON(odest);
-  var listOfOrigin=JSON.parse(olistOfOrigin);
-  var latC='{{ latC }}';
-  var lngC='{{ lngC }}';
-  
-  var mapProp = {
-    center:new google.maps.LatLng(latC,lngC),
-    zoom:9,
-    mapTypeId:google.maps.MapTypeId.ROADMAP
-  };
+    var odest='{{ dest }}';
+    var olistOfOrigin='{{ listOfOrigin }}';
+    var dest=decodeJSON(odest);
+    var listOfOrigin=JSON.parse(olistOfOrigin);
+    var latC='{{ latC }}';
+    var lngC='{{ lngC }}';
 
-  var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+    var mapProp = {
+center:new google.maps.LatLng(latC,lngC),
+       zoom:9,
+       mapTypeId:google.maps.MapTypeId.ROADMAP
+    };
 
-  var pinColor="FF0000";
-  var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
-        new google.maps.Size(21, 34),
-        new google.maps.Point(0,0),
-        new google.maps.Point(10, 34));
+    var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+
+    var pinColor="FF0000";
+    var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+            new google.maps.Size(21, 34),
+            new google.maps.Point(0,0),
+            new google.maps.Point(10, 34));
 
 
-  for(var i=0;i<dest.businesses.length;i++){
-    var marker=new google.maps.Marker({
-    position:{lat:dest.businesses[i].lat, lng:dest.businesses[i].lng},
-    map:map,
-    icon:pinImage
-  });
-  }
+    for(var i=0;i<dest.businesses.length;i++){
+        var marker=new google.maps.Marker({
+position:{lat:dest.businesses[i].lat, lng:dest.businesses[i].lng},
+map:map,
+icon:pinImage
+});
+}
 
-  for(var i=0;(i<dest.businesses.length && i<5);i++){
+for(var i=0;(i<dest.businesses.length && i<5);i++){
     cBus=dest.businesses[i]
-    var j=i+1;
+        var j=i+1;
     var pos="N"+j;
     var x=document.getElementById(pos);
-    x.innerHTML="("+j+") <a href=cBus['url']>"+cBus['name']+"</a> </br>"
-    x=document.getElementById("R"+j);
+    x.innerHTML="("+j+") <a href=" + cBus['url']+">"+cBus['name']+"</a> </br>"
+        x=document.getElementById("R"+j);
     x.innerHTML= "Rating: "+cBus['rating']+'</br> <img src="'+cBus['image_url']+'" alt="Image">';
-  }
+}
 
-  pinColor="0000FF"
-  pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+pinColor="0000FF"
+pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
         new google.maps.Size(21, 34),
         new google.maps.Point(0,0),
         new google.maps.Point(10, 34));
 
-  for (var i = 0; i < listOfOrigin.length; i++) {
+for (var i = 0; i < listOfOrigin.length; i++) {
     var origin = listOfOrigin[i];
     var marker = new google.maps.Marker({
-      position: {lat: origin[0], lng: origin[1]},
-      map: map,
-      icon:pinImage
-    });
-  }
+position: {lat: origin[0], lng: origin[1]},
+map: map,
+icon:pinImage
+});
+}
 }
 
 
@@ -81,55 +81,55 @@ function getNewLocation() {
 function showPosition(position) {
     document.locationForm.lat.value=position.coords.latitude;
     document.locationForm.lon.value=position.coords.longitude;
-    }   
+}   
 
 google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 
 <div class=page>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-<link rel="stylesheet" href="{{ url_for('static',filename='home.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static',filename='home.css') }}">
 
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">MapIO</a>
-    </div>
-    <div>
-        <a class="navbar-center">
-        <form class="navbar-form center-block" action="/search" method="POST" role="search">
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search" name="searchTerm" id="searchTerm">
-            <div class="input-group-btn">
-                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+    <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">MapIO</a>
+        </div>
+        <div>
+            <a class="navbar-center">
+                <form class="navbar-form center-block" action="/search" method="POST" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="searchTerm" id="searchTerm">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </a>
+            <div class=metanav>
+                <ul class="nav navbar-right display:inline-block"> 
+                    <form class="navbar-form center-block" action="/group" method="POST" role  ="search">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="groupID" name="groupID" id="groupID">
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </ul>
+
+                {% if user.is_authenticated() %}
+                <li><a href="/logout" class="glyphicon pull-right glyphicon-log-out pull-right"></a></li>
+                {% else %}
+                <li><a href="/login" class="glyphicon pull-right glyphicon-log-in pull-right"></a></li>
+                {% endif %}
+
+                <li><a href="/logout" class="pull-right">Create Group</a></li>
             </div>
         </div>
-        </form>
-      </a>
-      <div class=metanav>
-        <ul class="nav navbar-right display:inline-block"> 
-          <form class="navbar-form center-block" action="/group" method="POST" role  ="search">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="groupID" name="groupID" id="groupID">
-            <div class="input-group-btn">
-                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-            </div>
-        </div>
-        </form>
-        </ul>
-
-          {% if user.is_authenticated() %}
-          <li><a href="/logout" class="glyphicon pull-right glyphicon-log-out pull-right"></a></li>
-          {% else %}
-          <li><a href="/login" class="glyphicon pull-right glyphicon-log-in pull-right"></a></li>
-          {% endif %}
-
-          <li><a href="/logout" class="pull-right">Create Group</a></li>
-      </div>
     </div>
-  </div>
-</nav>
+    </nav>
 
 
 
@@ -140,96 +140,96 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 
 
-        <!-- Page Content -->
-        <div id="page-content-wrapper">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12" style="padding-left:0px">
-                        <div class="nav-side-menu">
-    <div class="brand">MapIO</div>
-    <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
-  
-        <div class="menu-list">
-  
-            <ul id="menu-content" class="menu-content collapse out">
-                <li>
-                  <a href="#">
-                  <i class="fa fa-dashboard fa-lg" style="text-align:center"></i> Recommended Meeting Spots
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                  <i id="N0" class="fa fa-users fa-lg"></i> 
-                  <i id="R0" style="text-align:center"/>
-                  </a>
-                </li>
-                 <li>
-                  <a href="#" style="text-align:center">
-                  <i id="N1" class="fa fa-users fa-lg"></i> 
-                  <i id="R1" style="text-align:center"/>
-                  </a>
-                  </li>
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12" style="padding-left:0px">
+                    <div class="nav-side-menu">
+                        <div class="brand">MapIO</div>
+                        <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
 
-                 <li>
-                  <a href="#">
-                  <i id="N2" class="fa fa-users fa-lg"></i> 
-                  <i id="R2" style="text-align:center"/>
-                  </a>
-                </li>
+                        <div class="menu-list">
 
-                 <li>
-                  <a href="#">
-                  <i id="N3" class="fa fa-users fa-lg"></i> 
-                  <i id="R3" style="text-align:center"/>
-                  </a>
-                </li>
+                            <ul id="menu-content" class="menu-content collapse out">
+                                <li>
+                                <a href="#">
+                                    <i class="fa fa-dashboard fa-lg" style="text-align:center"></i> Recommended Meeting Spots
+                                </a>
+                                </li>
+                                <li>
+                                <a href="#">
+                                    <i id="N0" class="fa fa-users fa-lg"></i> 
+                                    <i id="R0" style="text-align:center"></i>
+                                </a>
+                                </li>
+                                <li>
+                                <a href="#" style="text-align:center">
+                                    <i id="N1" class="fa fa-users fa-lg"></i> 
+                                    <i id="R1" style="text-align:center"></i>
+                                </a>
+                                </li>
 
-                 <li>
-                  <a href="#">
-                  <i id="N4" class="fa fa-users fa-lg"></i> 
-                  <i id="R4" style="text-align:center"/>
-                  </a>
-                </li>
+                                <li>
+                                <a href="#">
+                                    <i id="N2" class="fa fa-users fa-lg"></i> 
+                                    <i id="R2" style="text-align:center"></i>
+                                </a>
+                                </li>
 
-                <li>
-                  <a href="#">
-                  <i id="N5" class="fa fa-users fa-lg"></i> 
-                  <i id="R5" style="text-align:center"/>
-                  </a>
-                </li>
-                 
-                <li>
-                  <a href="#">
-                  <i id="N6" class="fa fa-users fa-lg"></i> 
-                  <i id="R6" style="text-align:center"/>
-                  </a>
-                </li>
+                                <li>
+                                <a href="#">
+                                    <i id="N3" class="fa fa-users fa-lg"></i> 
+                                    <i id="R3" style="text-align:center"></i>
+                                </a>
+                                </li>
 
-            </ul>
-     </div>
-</div>
+                                <li>
+                                <a href="#">
+                                    <i id="N4" class="fa fa-users fa-lg"></i> 
+                                    <i id="R4" style="text-align:center"></i>
+                                </a>
+                                </li>
 
-                        <div id="googleMap"></div>
-                        
+                                <li>
+                                <a href="#">
+                                    <i id="N5" class="fa fa-users fa-lg"></i> 
+                                    <i id="R5" style="text-align:center"></i>
+                                </a>
+                                </li>
 
-                        <div id="locationForm"> 
-                          <form name="locationForm" action="/" method='POST'>
-                          <input id='lat' type=text name="lat" value=0>
-                          <input id='lon' type=text name="lon" value=0>
+                                <li>
+                                <a href="#">
+                                    <i id="N6" class="fa fa-users fa-lg"></i> 
+                                    <i id="R6" style="text-align:center"></i>
+                                </a>
+                                </li>
 
-                          {% if user.is_authenticated() %}
-                          <input type="submit" value="Send Location"/>
-                          {% endif %}
+                            </ul>
                         </div>
-                        </form>
                     </div>
+
+                    <div id="googleMap" style="width:500px;height:400px;"></div>
+
+
+                    <div id="locationForm"> 
+                        <form name="locationForm" action="/" method='POST'>
+                            <input id='lat' type=text name="lat" value=0>
+                            <input id='lon' type=text name="lon" value=0>
+
+                            {% if user.is_authenticated() %}
+                            <input type="submit" value="Send Location"/>
+                            {% endif %}
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-        <!-- /#page-content-wrapper -->
-
     </div>
+    <!-- /#page-content-wrapper -->
 
-</body>
+</div>
 
-</html> 
+                    </body>
+
+                </html> 
