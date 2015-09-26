@@ -14,7 +14,13 @@ def findCenterSimple(listOfLocs):
 
 	return (centLat, centLong)
 
-def calcCenterThreePoints(x1,y1,x2,y2,x3,y3):
+def calcCenterThreePoints(loc1, loc2, loc3):
+	x1 = loc1[0];
+	y1 = loc1[1];
+	x2 = loc2[0];
+	y2 = loc2[1];
+	x3 = loc3[0];
+	y3 = loc3[1];
 
 	m1 = (y2-y1)*1.0/(x2-x1)
 	m1p = 1.0/(-m1)
@@ -43,53 +49,71 @@ def calcCenterThreePoints(x1,y1,x2,y2,x3,y3):
 
 	yi = (m2p/m1p*c1p-c2p)*m1p/(m2p-m1p)
 	xi = (yi-c2p)/m2p
-	rad = pow((x1-xi)**2 + (y1-yi)**2, 0.5)
+	rad = pow((x1-xi)**2 + (y1-yi)**2, 0.5)/2.0
 
 	return [(xi,yi),rad]
 
+def distance(loc1, loc2):
+	return pow((loc1[0]-loc2[0])**2.0 + (loc1[1]-loc2[1])**2.0, 0.5 )
 
-def smallestCircle(listToProc, lenToProc, listProcced, currCenter, currRadius):
-	if ( lenToProc == 0 ):
-		return (currCenter,currRadius)
-	
-	newPoint = listToProc[lenToProc-1]
+def calcCenterTwoPoints(loc1, loc2):
+	x1 = loc1[0];
+	y1 = loc1[1];
+	x2 = loc2[0];
+	y2 = loc2[1];
+	return [((x1+x2)/2., (y1+y2)/2.),pow((x2-x1)**2+(y2-y1)**2, 0.5)/2.]
 
-	if ( pow(pow( (newPoint[0]-currCenter[0]), 2) + pow( (newPoint[1]-currCenter[1]), 2),0.5) <= currRadius):
-		return smallestCircle(listToProc, lenToProc-1, listProcced, currCenter, currRadius)
-
-	res = []
-	res.append( calcCenterThreePoints(newPoint[0], newPoint[1], listProcced[1][0], listProcced[1][1], listProcced[2][0], listProcced[2][1]) )
-	res.append( calcCenterThreePoints(newPoint[0], newPoint[1], listProcced[0][0], listProcced[0][1], listProcced[2][0], listProcced[2][1]) )
-	res.append( calcCenterThreePoints(newPoint[0], newPoint[1], listProcced[0][0], listProcced[0][1], listProcced[1][0], listProcced[1][1]) )
-
-	idx = 0
-	min = res[0][1]
-	for x in range(0,2):
-		if ( res[x][1] < min):
-			min = res[x][1]
-			idx = x
-
-	listProcced[idx] = newPoint
-	return smallestCircle(listToProc, lenToProc-1, listProcced, res[idx][0], res[idx][1])
-
-	return res[idx]
 
 def findCenterMinLargest(listOfLocs):
- 	if ( len(listOfLocs) < 3 ):
- 		retLat = 0.0
- 		retLong = 0.0
- 		for loc in listOfLocs:
- 			retLat += loc[0]
- 			retLong += loc[1]
- 		retLat /= len(listOfLocs)
- 		retLong /= len(listOfLocs)
+ 	
+	bestCirc = [(0,0),10000000000000000]
 
- 		return (retLat,retLong)
+ 	for c in range(0,len(listOfLocs)):
+ 		for d in range(0,len(listOfLocs)):
+ 			if ( c == d):
+ 				continue
+ 			#do the two case
+ 			currCirc = calcCenterTwoPoints(listOfLocs[c], listOfLocs[d])
+ 			works = True
+ 			for e in range(0,len(listOfLocs)):
+ 				if ( distance(currCirc[0], listOfLocs[e]) > currCirc[1] ):
+ 					works = False
+ 					break
+ 			if (works and (bestCirc[1] > currCirc[1]) ) :
+ 				bestCirc = currCirc
 
- 	centerInfo = calcCenterThreePoints(listOfLocs[0][0],listOfLocs[0][1],listOfLocs[1][0],listOfLocs[1][1], listOfLocs[2][0],listOfLocs[2][1])
- 	initCenter = centerInfo[0]
- 	initRadius = centerInfo[1]
+ 			for f in range(0,len(listOfLocs)):
+ 				if ( f == d ):
+ 					continue
+ 				
+ 				currCirc = calcCenterThreePoints(listOfLocs[c], listOfLocs[d], listOfLocs[f])
+ 				for e in range(0,len(listOfLocs)):
+ 					if ( distance(currCirc[0], listOfLocs[e]) > currCirc[1] ):
+ 						works = False
+ 						break
+ 				if (works and (bestCirc[1] > currCirc[1])):
+ 					bestCirc = currCirc
 
- 	listProcced = listOfLocs[0:3]
+ 	return bestCirc
 
- 	return smallestCircle(listOfLocs, len(listOfLocs), listProcced, initCenter, initRadius)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
