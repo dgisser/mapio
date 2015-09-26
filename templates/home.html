@@ -19,9 +19,11 @@ function initialize() {
   var olistOfOrigin='{{ listOfOrigin }}';
   var dest=decodeJSON(odest);
   var listOfOrigin=JSON.parse(olistOfOrigin);
+  var lllists="123456789";
+  var lnum=0;
   var latC='{{ latC }}';
   var lngC='{{ lngC }}';
-  
+
   var mapProp = {
     center:new google.maps.LatLng(latC,lngC),
     zoom:9,
@@ -31,13 +33,13 @@ function initialize() {
   var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
 
   var pinColor="FF0000";
-  var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+  for(var i=0;(i<dest.businesses.length && i<5);i++){
+      var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld="+lllists[lnum++]+"|" + pinColor,
         new google.maps.Size(21, 34),
         new google.maps.Point(0,0),
         new google.maps.Point(10, 34));
 
 
-  for(var i=0;i<dest.businesses.length;i++){
     var marker=new google.maps.Marker({
     position:{lat:dest.businesses[i].lat, lng:dest.businesses[i].lng},
     map:map,
@@ -81,7 +83,7 @@ function getNewLocation() {
 function showPosition(position) {
     document.locationForm.lat.value=position.coords.latitude;
     document.locationForm.lon.value=position.coords.longitude;
-    }   
+    }
 
 google.maps.event.addDomListener(window, 'load', initialize);
 </script>
@@ -108,7 +110,7 @@ google.maps.event.addDomListener(window, 'load', initialize);
         </form>
       </a>
       <div class=metanav>
-        <ul class="nav navbar-right display:inline-block"> 
+        <ul class="nav navbar-right display:inline-block">
           <form class="navbar-form center-block" action="/group" method="POST" role  ="search">
           <div class="input-group">
             <input type="text" class="form-control" placeholder="groupID" name="groupID" id="groupID">
@@ -148,9 +150,9 @@ google.maps.event.addDomListener(window, 'load', initialize);
                         <div class="nav-side-menu">
     <div class="brand">MapIO</div>
     <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
-  
+
         <div class="menu-list">
-  
+
             <ul id="menu-content" class="menu-content collapse out">
                 <li>
                   <a href="#">
@@ -159,48 +161,48 @@ google.maps.event.addDomListener(window, 'load', initialize);
                 </li>
                 <li>
                   <a href="#">
-                  <i id="N0" class="fa fa-users fa-lg"></i> 
+                  <i id="N0" class="fa fa-users fa-lg"></i>
                   <i id="R0" style="text-align:center"/>
                   </a>
                 </li>
                  <li>
                   <a href="#" style="text-align:center">
-                  <i id="N1" class="fa fa-users fa-lg"></i> 
+                  <i id="N1" class="fa fa-users fa-lg"></i>
                   <i id="R1" style="text-align:center"/>
                   </a>
                   </li>
 
                  <li>
                   <a href="#">
-                  <i id="N2" class="fa fa-users fa-lg"></i> 
+                  <i id="N2" class="fa fa-users fa-lg"></i>
                   <i id="R2" style="text-align:center"/>
                   </a>
                 </li>
 
                  <li>
                   <a href="#">
-                  <i id="N3" class="fa fa-users fa-lg"></i> 
+                  <i id="N3" class="fa fa-users fa-lg"></i>
                   <i id="R3" style="text-align:center"/>
                   </a>
                 </li>
 
                  <li>
                   <a href="#">
-                  <i id="N4" class="fa fa-users fa-lg"></i> 
+                  <i id="N4" class="fa fa-users fa-lg"></i>
                   <i id="R4" style="text-align:center"/>
                   </a>
                 </li>
 
                 <li>
                   <a href="#">
-                  <i id="N5" class="fa fa-users fa-lg"></i> 
+                  <i id="N5" class="fa fa-users fa-lg"></i>
                   <i id="R5" style="text-align:center"/>
                   </a>
                 </li>
-                 
+
                 <li>
                   <a href="#">
-                  <i id="N6" class="fa fa-users fa-lg"></i> 
+                  <i id="N6" class="fa fa-users fa-lg"></i>
                   <i id="R6" style="text-align:center"/>
                   </a>
                 </li>
@@ -210,9 +212,9 @@ google.maps.event.addDomListener(window, 'load', initialize);
 </div>
 
                         <div id="googleMap"></div>
-                        
 
-                        <div id="locationForm"> 
+
+                        <div id="locationForm">
                           <form name="locationForm" action="/" method='POST'>
                           <input id='lat' type=text name="lat" value=0>
                           <input id='lon' type=text name="lon" value=0>
@@ -232,4 +234,4 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 </body>
 
-</html> 
+</html>
