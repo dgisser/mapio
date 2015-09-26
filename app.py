@@ -104,7 +104,12 @@ def yelpSearch(ll, term):
 			cBus["image_url"]=image
 		else:
 			cBus["image_url"]=None
-		lat=loc['coordinate']['latitude']
+                if 'rating_img_url' in i.keys():
+                        rating_url=i['rating_img_url']
+                        cBus['rating_images_url']=rating_url
+                else:
+                        cBus['irating_images_url']=None
+                lat=loc['coordinate']['latitude']
 		lng=loc['coordinate']['longitude']
 		address=loc['display_address']
 		cBus["rating"]=rating
@@ -112,7 +117,8 @@ def yelpSearch(ll, term):
 		cBus["name"]=name
 		cBus["lat"]=lat
 		cBus["lng"	]=lng
-		cBus["add"]=address
+		cBus["rer"]=i['review_count']
+                cBus["add"]=address
 		businessList.append(cBus)
 
 	businessJson={}

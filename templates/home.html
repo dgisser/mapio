@@ -79,9 +79,9 @@ function initialize() {
     var j=i+1;
     var pos="N"+j;
     var x=document.getElementById(pos);
-    x.innerHTML="("+j+") <a href=cBus['url']>"+cBus['name']+"</a> </br>"
+    x.innerHTML="("+j+") <a href=" + cBus['url']+">"+cBus['name']+"</a> </br>"
     x=document.getElementById("R"+j);
-    x.innerHTML= "Rating: "+cBus['rating']+'</br> <img src="'+cBus['image_url']+'" alt="Image">';
+    x.innerHTML= '<img src="'+cBus['image_url']+'" alt="Image"> </br> <img src="'+cBus['rating_images_url']+'" alt="Image"> Number of Reviews: '+cBus['rer'];
   }
 
   pinColor="0000FF"
@@ -171,9 +171,9 @@ google.maps.event.addDomListener(window, 'load', initialize);
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12" style="padding-left:0px">
-                      <table style="width:100%">
-                        <tr>
-                          <td style="width:10%">
+                        <table style="width:100%">
+                            <tr>
+                                <td style="width:10%">
                         <div class="nav-side-menu">
     <div class="brand">MapIO</div>
     <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
@@ -231,14 +231,15 @@ google.maps.event.addDomListener(window, 'load', initialize);
                   <a href="#">
                   <i id="N6" class="fa fa-users fa-lg"></i>
                   <i id="R6" style="text-align:center"/>
+                      <img src="https://s3-media3.fl.yelpcdn.com/assets/srv0/developer_pages/65526d1a519b/assets/img/Powered_By_Yelp_Red.png">
                   </a>
                 </li>
 
             </ul>
      </div>
 </div>
-</td>
-<td>
+                                </td>
+                                <td>
                         <div id="googleMap"></div>
 
 
@@ -252,8 +253,9 @@ google.maps.event.addDomListener(window, 'load', initialize);
                           {% endif %}
                         </form>
                         </div>
-                      </td>
-                    </table>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
