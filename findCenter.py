@@ -12,7 +12,7 @@ def findCenterSimple(listOfLocs):
 	centLat /= len(listOfLocs)
 	centLong /= len(listOfLocs)
 
-	return (centLat, centLong)
+	return [(centLat, centLong),0]
 
 def calcCenterThreePoints(loc1, loc2, loc3):
 	x1 = loc1[0];
@@ -49,7 +49,7 @@ def calcCenterThreePoints(loc1, loc2, loc3):
 
 	yi = (m2p/m1p*c1p-c2p)*m1p/(m2p-m1p)
 	xi = (yi-c2p)/m2p
-	rad = pow((x1-xi)**2 + (y1-yi)**2, 0.5)/2.0
+	rad = pow((x1-xi)**2 + (y1-yi)**2, 0.5)
 
 	return [(xi,yi),rad]
 
@@ -66,7 +66,7 @@ def calcCenterTwoPoints(loc1, loc2):
 
 def findCenterMinLargest(listOfLocs):
  	
-	bestCirc = [(0,0),10000000000000000]
+	bestCirc = [(0,0),10000000000000000000000000000000000]
 
  	for c in range(0,len(listOfLocs)):
  		for d in range(0,len(listOfLocs)):
@@ -76,7 +76,7 @@ def findCenterMinLargest(listOfLocs):
  			currCirc = calcCenterTwoPoints(listOfLocs[c], listOfLocs[d])
  			works = True
  			for e in range(0,len(listOfLocs)):
- 				if ( distance(currCirc[0], listOfLocs[e]) > currCirc[1] ):
+ 				if ( distance(currCirc[0], listOfLocs[e]) > currCirc[1] + 0.01 ):
  					works = False
  					break
  			if (works and (bestCirc[1] > currCirc[1]) ) :
@@ -85,10 +85,10 @@ def findCenterMinLargest(listOfLocs):
  			for f in range(0,len(listOfLocs)):
  				if ( f == d ):
  					continue
- 				
  				currCirc = calcCenterThreePoints(listOfLocs[c], listOfLocs[d], listOfLocs[f])
+ 				works = True
  				for e in range(0,len(listOfLocs)):
- 					if ( distance(currCirc[0], listOfLocs[e]) > currCirc[1] ):
+ 					if ( distance(currCirc[0], listOfLocs[e]) > currCirc[1]+0.01 ):
  						works = False
  						break
  				if (works and (bestCirc[1] > currCirc[1])):
