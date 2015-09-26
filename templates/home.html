@@ -54,7 +54,7 @@ for(var i=0;(i<dest.businesses.length && i<5);i++){
     var x=document.getElementById(pos);
     x.innerHTML="("+j+") <a href=" + cBus['url']+">"+cBus['name']+"</a> </br>"
         x=document.getElementById("R"+j);
-    x.innerHTML= "Rating: "+cBus['rating']+'</br> <img src="'+cBus['image_url']+'" alt="Image">';
+    x.innerHTML= '<img src="'+cBus['image_url']+'" alt="Image"> </br> <img src="'+cBus['rating_image_url']+'" alt="Image"> Reviewed By: '+cBus['review_count'];
 }
 
 pinColor="0000FF"

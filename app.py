@@ -84,7 +84,7 @@ def returnSearch():
 
 @app.route("/group",methods=['post'])
 def returnGroup():
-	
+	return "Hello"
 
 def yelpSearch(ll, term):
 	try:
@@ -106,11 +106,20 @@ def yelpSearch(ll, term):
 			cBus["image_url"]=image
 		else:
 			cBus["image_url"]=None
+
+
+		if 'rating_img_url' in i.keys():
+			image=i['rating_img_url']
+			cBus["rating_image_url"]=image
+		else:
+			cBus["rating_image_url"]=None
 		lat=loc['coordinate']['latitude']
 		lng=loc['coordinate']['longitude']
+		rvCt=i['review_count']
 		address=loc['display_address']
 		cBus["rating"]=rating
 		cBus["url"]=url
+		cBus["review_count"]=rvCt
 		cBus["name"]=name
 		cBus["lat"]=lat
 		cBus["lng"	]=lng
