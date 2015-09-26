@@ -71,15 +71,24 @@ def login_check():
     	flash('Username or password incorrect')
         return redirect('/login')
 
+@app.route('/_get_location')
+def add_numbers():
+    uLat = request.args.get('cLat', 0, type=float)
+    uLon = request.args.get('cLon', 0, type=float)
+    print(uLat)
+    return redirect('/')
+
 
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect('/')
 
-@app.route("/")
+@app.route("/", methods=['post','get'])
 def hello():
-    return render_template('home.html')
+	if request.method=='POST':
+		print("YES")
+	return render_template('home.html')
 
 
 if __name__ == "__main__":
