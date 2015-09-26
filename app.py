@@ -55,12 +55,16 @@ listOfOrigin = [[40.890542, -81.274856, 4],[39.923036, -80.259052, 5],[40.028249
 def hello():
 	if request.method=='POST':
 		cLat=float(request.form['lat'])
-		cLon=float(request.form['lon'])
+		cLon=float(request.form['lon'])	
 		newl=[]
 		newl.append(cLat)
 		newl.append(cLon)
-		newl.append(1)
-		listOfOrigin.append(newl)
+		boo=True
+		for i in listOfOrigin:
+			if(i[0]==cLat and i[1]==cLon):
+				boo=False
+		if(boo):
+			listOfOrigin.append(newl)
 
 	ll=findCenterMinLargest(listOfOrigin)[0]
 	term=""
@@ -91,10 +95,17 @@ def yelpSearch(ll, term):
 		url=i['url']
 		name=i['name']
 		loc=i['location']
+		rating=i['rating']
+		cBus={}
+		if 'image_url' in i.keys():
+			image=i['image_url']
+			cBus["image_url"]=image
+		else:
+			cBus["image_url"]=None
 		lat=loc['coordinate']['latitude']
 		lng=loc['coordinate']['longitude']
 		address=loc['display_address']
-		cBus={}
+		cBus["rating"]=rating
 		cBus["url"]=url
 		cBus["name"]=name
 		cBus["lat"]=lat

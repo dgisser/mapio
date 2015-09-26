@@ -47,9 +47,11 @@ function initialize() {
   for(var i=0;(i<dest.businesses.length && i<5);i++){
     cBus=dest.businesses[i]
     var j=i+1;
-    var pos="R"+j;
+    var pos="N"+j;
     var x=document.getElementById(pos);
-    x.innerHTML="<a href=cBus['url']>"+cBus['name']+"</a> </br>";
+    x.innerHTML="("+j+") <a href=cBus['url']>"+cBus['name']+"</a> </br>"
+    x=document.getElementById("R"+j);
+    x.innerHTML= "Rating: "+cBus['rating']+'</br> <img src="'+cBus['image_url']+'" alt="Image">';
   }
 
   pinColor="0000FF"
@@ -137,35 +139,35 @@ google.maps.event.addDomListener(window, 'load', initialize);
                 </li>
                  <li>
                   <a href="#">
-                  <i class="fa fa-user fa-lg"></i> 1
+                  <i id="N1" class="fa fa-users fa-lg"></i> 
                   <i id="R1"/>
                   </a>
                   </li>
 
                  <li>
                   <a href="#">
-                  <i class="fa fa-users fa-lg"></i> 2
+                  <i id="N2" class="fa fa-users fa-lg"></i> 
                   <i id="R2"/>
                   </a>
                 </li>
 
                  <li>
                   <a href="#">
-                  <i class="fa fa-users fa-lg"></i> 3
+                  <i id="N3" class="fa fa-users fa-lg"></i> 
                   <i id="R3"/>
                   </a>
                 </li>
 
                  <li>
                   <a href="#">
-                  <i class="fa fa-users fa-lg"></i> 4
+                  <i id="N4" class="fa fa-users fa-lg"></i> 
                   <i id="R4"/>
                   </a>
                 </li>
 
                  <li>
                   <a href="#">
-                  <i class="fa fa-users fa-lg"></i> 5
+                  <i id="N5" class="fa fa-users fa-lg"></i> 
                   <i id="R5"/>
                   </a>
                 </li>
