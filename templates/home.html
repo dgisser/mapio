@@ -19,7 +19,7 @@ function initialize() {
   var dest=decodeJSON(odest);
   var listOfOrigin=JSON.parse(olistOfOrigin);
   var mapProp = {
-    center:new google.maps.LatLng(-33,151.0),
+    center:new google.maps.LatLng(40,-81.0),
     zoom:9,
     mapTypeId:google.maps.MapTypeId.ROADMAP
   };
@@ -76,9 +76,9 @@ google.maps.event.addDomListener(window, 'load', initialize);
       </ul>
       
       <a class="navbar-center">
-        <form class="navbar-form center-block" role="search">
+        <form class="navbar-form center-block" action="/search" method="POST" role="search">
         <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
+            <input type="text" class="form-control" placeholder="Search" name="searchTerm" id="searchTerm">
             <div class="input-group-btn">
                 <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
             </div>
